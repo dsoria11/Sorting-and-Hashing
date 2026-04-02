@@ -9,7 +9,7 @@ typedef struct
 	size_t size; // m positions
 } BloomArray;
 
-// Allocating and initializing array to 0 (Modified for bit-packing: m/32)
+// Allocating and initializing array to 0 (Modified for bit-packing: m/32 to not waste memory)
 BloomArray* create_array(size_t m) {
 	BloomArray *ba = (BloomArray*)malloc(sizeof(BloomArray));
 	if (ba == NULL) {
@@ -28,7 +28,6 @@ BloomArray* create_array(size_t m) {
 	return ba;
 }
 
-// Extension: To reduce wasting memory for int allocation
 // Set bit i to 1 using bitwise OR and left shift
 void set_bit(BloomArray *ba, size_t i) {
 	if (i < ba->size) {
@@ -53,7 +52,7 @@ bool check_bit(BloomArray *ba, size_t i) {
 }
 
 // Memory cleanup
-void destroy_array(BloomArray *ba) {
+void remove_array(BloomArray *ba) {
 	if (ba != NULL) {
 		free(ba->array);
 		free(ba);
@@ -75,7 +74,7 @@ int main() {
 	printf("Is bit 15 set? %d\n", check_bit(myFilter, 15));
 
 	// to clean up
-	destroy_array(myFilter);
+	remove_array(myFilter);
 	return 0;
 }
 
